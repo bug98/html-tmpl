@@ -115,8 +115,19 @@ gulp.task('css', function(){
 });
 
 gulp.task('html', function(){
-    gulp.src('develop/**/*.html', {base:'develop/'})
-        .pipe(gulp.dest('html/'));
+
+    var env = minimist(process.argv.slice(2));
+    if (env.dev) {
+        data = {debug : true};
+    } else {
+        data = {debug : false};
+    }
+
+    // 対象にするファイル
+    gulp.src(['./source/ejs/**/*.html', '!' + './source/ejs/**/_*.html'])
+        .pipe(plumber())
+        .pipe(gulp.dest('./html/'))
+
 });
 
 gulp.task('build', function(done) {
@@ -124,7 +135,6 @@ gulp.task('build', function(done) {
         'clean',
         'initialize',
         'compass',
-        'ejs',
         'html',
         'css',
         'js.concat',
