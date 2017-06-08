@@ -1,0 +1,38 @@
+#debug_dialog{
+  width: 400px;
+  height: 160px;
+  border: 1px solid #CCC;
+  box-shadow: 0 1px 1px 1px rgba(100, 100, 100, .1);
+  z-index: 999999;
+  position: fixed !important;
+  top: 30px;
+  right: 50px;
+  background-color: #000;
+  color: #FFF;
+}
+
+#debug_dialog .handle{
+  height: 10px;
+  background-color: #666;
+}
+#debug_dialog .inner{
+  padding: 10px 20px;
+}
+
+#debug_dialog .inner #opacity,
+#debug_dialog .inner #position{
+  margin-bottom: 30px;
+}
+
+body .contents_debug{
+  /* letter-spacing: -0.06em; */
+  /*letter-spacing: -0.032em;*/
+  opacity: 1;
+  background-color: #fff;
+}
+body{
+  background-position: center 0;
+  background-repeat: no-repeat;
+}
+
+body#top{ background-image: url(guid/960_grid_24_col.png); }
