@@ -115,13 +115,12 @@ gulp.task('css', function(){
 });
 
 gulp.task('html', function(){
-
+    data = {debug : false};
     // 対象にするファイル
     gulp.src(['./source/ejs/**/*.html', '!' + './source/ejs/**/_*.html'])
         .pipe(plumber())
-        .pipe(ejs())
+        .pipe(ejs(data))
         .pipe(gulp.dest('./html/'))
-
 });
 
 gulp.task('build', function(done) {
