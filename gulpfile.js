@@ -19,9 +19,9 @@ gulp.task('ejs', function() {
 
     var env = minimist(process.argv.slice(2));
     if (env.dev) {
-        data = {debug : true};
+        data = {debug : true, devMode: true};
     } else {
-        data = {debug : false};
+        data = {debug : false, devMode: true};
     }
 
     // 対象にするファイル
@@ -115,7 +115,7 @@ gulp.task('css', function(){
 });
 
 gulp.task('html', function(){
-    data = {debug : false};
+    data = {debug : false, devMode: false};
     // 対象にするファイル
     gulp.src(['./source/ejs/**/*.html', '!' + './source/ejs/**/_*.html'])
         .pipe(plumber())

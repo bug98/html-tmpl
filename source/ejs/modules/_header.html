@@ -12,7 +12,13 @@
     <script type="text/javascript" src="js/lib/modernizr-custom.js" charset="utf-8"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" charset="utf-8"></script>
+    <% if(devMode == true){ %>
+    <script type="text/javascript" src="js/main.js" charset="utf-8"></script>
+    <% }else{ %>
     <script type="text/javascript" src="js/main.min.js" charset="utf-8"></script>
+    <% } %>
+
+
 
     <% if(debug){ %>
     <!-- degub -->

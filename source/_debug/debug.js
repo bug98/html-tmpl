@@ -1,8 +1,15 @@
 document.write('<link href="_debug/jquery-ui.css" rel="stylesheet">');
+document.write('<script src="_debug/jquery.cookie.js"></script>');
 document.write('<script src="_debug/jquery-ui.js"></script>');
 document.write('<link rel="stylesheet" href="_debug/debug.css">');
 
 $(function(){
+  //設定値がクッキーに入っているか
+    var _swatchVal = $.cookie("swatchVal") ? $.cookie("swatchVal") : 100;
+    var _positionVal = $.cookie("positionVal") ? $.cookie("positionVal") : 150;
+    var _spacingVal = $.cookie("spacingVal") ? $.cookie("spacingVal") : 500;
+
+
   //bodyの内側をwrapする
   $('body').wrapInner('<div class="sukesuke">');
 
@@ -18,22 +25,25 @@ $(function(){
   var refreshSwatch = function(){
     opacity = $( "#opacity" ).slider('value') / 100;
     $('body .sukesuke').css({'opacity' : opacity});
+      $.cookie("swatchVal", $( "#opacity" ).slider('value'));
   }
 
   var refreshPosition = function(){
     position = $( "#position" ).slider('value') - 150;
     $('body').css('background-position', 'center ' + position + 'px');
+      $.cookie("positionVal", $( "#position" ).slider('value'));
   }
   var refreshSpacing = function(){
     spacing = ($( "#spacing" ).slider('value') - 500) / 1000;
     $('body').css('letter-spacing', spacing + 'em');
+      $.cookie("spacingVal", $( "#spacing" ).slider('value'));
   }
 
   $( "#opacity" ).slider({
     orientation: "horizontal",
     range: "min",
     max: 100,
-    value: 100,
+    value: _swatchVal,
     slide: refreshSwatch,
     change: refreshSwatch
   });
@@ -41,7 +51,7 @@ $(function(){
     orientation: "horizontal",
     range: "min",
     max: 300,
-    value: 150,
+    value: _positionVal,
     slide: refreshPosition,
     change: refreshPosition
   });
@@ -49,11 +59,14 @@ $(function(){
     orientation: "horizontal",
     range: "min",
     max: 500,
-    value: 500,
+    value: _spacingVal,
     slide: refreshSpacing,
     change: refreshSpacing
   });
 
+    refreshPosition();
+    refreshPosition();
+    refreshSpacing();
 
   var bg = $('body').css('background-image');
 
