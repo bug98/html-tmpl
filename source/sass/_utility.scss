@@ -1,3 +1,9 @@
+// utility
+//
+// Styleguide 1.0
+
+
+
 @for $i from 1 through 100{
   .mt#{$i}{ margin-top: 1px * $i; }
   .mr#{$i}{ margin-right: 1px * $i; }
@@ -23,9 +29,9 @@
   font-weight: normal !important;
 }
 
-.clearfix {
-  @include pie-clearfix();
-}
+//.clearfix {
+//  @include pie-clearfix();
+//}
 
 .tac{
   text-align: center;

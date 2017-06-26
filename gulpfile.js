@@ -14,6 +14,9 @@ var runSequence = require('run-sequence');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var sass     = require('gulp-ruby-sass');
+var pleeease = require('gulp-pleeease');
+var styleguide = require('sc5-styleguide');
 
 
 var SCSS_FILE = './source/sass/**/*.scss';
@@ -54,6 +57,45 @@ gulp.task('compass', function () {
         }))
         .pipe(sourcemaps.write());
 });
+
+gulp.task('sass', function() {
+        sass('./source/sass/**/*.scss',{
+            style: 'expanded',
+            compass : true
+        })
+        .pipe(plumber())
+        .pipe(pleeease({
+            autoprefixer: {
+                browsers: ['last 2 versions']
+            },
+            minifier: false // minify無効
+        }))
+        .pipe(gulp.dest('./develop/css/'));
+});
+
+// ==== styleguide ===
+gulp.task('styleguide:generate', function() {
+    return gulp.src('source/sass/**/*.scss')
+        .pipe(styleguide.generate({
+            title: 'スタイルガイド',
+            server: true,
+            rootPath: 'develop/styleguide/',
+            overviewPath: 'source/sass/overview.md',/*overviewファイルの場所を指定*/
+            port: 4000,
+        }))
+        .pipe(gulp.dest('./develop/styleguide/'));
+});
+
+gulp.task('styleguide:applystyles', function() {
+    return sass('source/sass/**/*.scss', {
+            style: 'expanded',
+            compass : true
+        })
+        .pipe(styleguide.applyStyles())
+        .pipe(gulp.dest('./develop/styleguide/'));
+});
+gulp.task('styleguide', ['styleguide:generate', 'styleguide:applystyles']);
+
 
 
 gulp.task('bsreload', function () {
@@ -100,14 +142,14 @@ gulp.task('copy', function () {
 });
 
 // watch処理
-gulp.task('watch', ['compass', 'ejs', 'js.browserify', 'copy'], function () {
+gulp.task('watch', ['sass', 'ejs', 'js.browserify', 'copy'], function () {
     browserSync({
         server: {
             baseDir: "./develop/" // ルートとなるディレクトリを指定
         }
     });
     gulp.watch('./source/ejs/**/*.html', ['ejs']);
-    gulp.watch('./source/sass/**/*.scss', ['compass']);
+    gulp.watch('./source/sass/**/*.scss', ['sass']);
     gulp.watch('./source/js/**/*.js', ['js.browserify']);
     gulp.watch(['./source/images/**/**/*.{jpg, png, gif, svg}', './source/js/lib/**/*', './source/_debug/**/*'], ['copy', 'bsreload']);
     gulp.watch(["./develop/*.html", "./develop/css/*.css", "./develop/js/*.js"], ['bsreload']);
@@ -144,7 +186,7 @@ gulp.task('build', function (done) {
     runSequence(
         'clean',
         'initialize',
-        'compass',
+        'sass',
         'html',
         'css',
         'js.browserify',
