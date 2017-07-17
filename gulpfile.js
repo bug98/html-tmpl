@@ -128,9 +128,13 @@ gulp.task('js.uglify', ['js.browserify'], function () {
 });
 
 gulp.task('copy', function () {
-    gulp.src('source/images/**/**/*.{jpg, png, gif, svg}', {base: 'source/images/'})
+    gulp.src('source/images/**/**/*.{jpg,png,gif,svg}', {base: 'source/images/'})
         .pipe(changed('develop/images/'))
         .pipe(gulp.dest('develop/images/'));
+
+    gulp.src('source/lib/**/*', {base: 'source/lib/'})
+        .pipe(changed('develop/lib/'))
+        .pipe(gulp.dest('develop/lib/'));
 
     gulp.src('source/js/lib/**/*', {base: 'source/js/lib/'})
         .pipe(changed('develop/js/lib/'))
@@ -151,7 +155,7 @@ gulp.task('watch', ['sass', 'ejs', 'js.browserify', 'copy'], function () {
     gulp.watch('./source/ejs/**/*.html', ['ejs']);
     gulp.watch('./source/sass/**/*.scss', ['sass']);
     gulp.watch('./source/js/**/*.js', ['js.browserify']);
-    gulp.watch(['./source/images/**/**/*.{jpg, png, gif, svg}', './source/js/lib/**/*', './source/_debug/**/*'], ['copy', 'bsreload']);
+    gulp.watch(['./source/images/**/**/*.{jpg,png,gif,svg}', './source/js/lib/**/*', './source/_debug/**/*'], ['copy', 'bsreload']);
     gulp.watch(["./develop/*.html", "./develop/css/*.css", "./develop/js/*.js"], ['bsreload']);
 });
 
@@ -161,8 +165,11 @@ gulp.task('clean', function (cb) {
     return del('html');
 });
 gulp.task('initialize', function () {
-    gulp.src('source/images/**/**/*.{jpg, png, gif, svg}', {base: 'source/images/'})
+    gulp.src('source/images/**/**/*.{jpg,png,gif,svg}', {base: 'source/images/'})
         .pipe(gulp.dest('html/images/'));
+
+    gulp.src('source/lib/**/*', {base: 'source/lib/'})
+        .pipe(gulp.dest('html/lib/'));
 
     gulp.src('source/js/lib/**/*', {base: 'source/js/lib/'})
         .pipe(gulp.dest('html/js/lib/'));
