@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var plumber = require('gulp-plumber');
 var ejs = require('gulp-ejs');
-var compass = require('gulp-compass');
 var sourcemaps = require('gulp-sourcemaps');
 var browserSync = require('browser-sync');
 var uglify = require("gulp-uglify");
@@ -14,7 +13,11 @@ var runSequence = require('run-sequence');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var sass     = require('gulp-ruby-sass');
+//var bulkSass = require('gulp-sass-bulk-import');
+//var sassGlob = require('gulp-sass-glob');
+var bulkSass = require('gulp-sass-bulk-import');
+//var sass     = require('gulp-ruby-sass');
+var sass     = require('gulp-sass');
 var pleeease = require('gulp-pleeease');
 var styleguide = require('sc5-styleguide');
 
@@ -42,27 +45,10 @@ gulp.task('ejs', function () {
         .pipe(gulp.dest('./develop/'))
 });
 
-/*
- * Compass
- */
-gulp.task('compass', function () {
-    gulp.src([SCSS_FILE])
-        .pipe(plumber())
-        .pipe(compass({
-            config_file: 'config.rb',
-            comments: false,
-            css: './develop/css/',
-            sass: './source/sass/',
-            sourcemap: true
-        }))
-        .pipe(sourcemaps.write());
-});
-
 gulp.task('sass', function() {
-        sass('./source/sass/**/*.scss',{
-            style: 'expanded',
-            compass : true
-        })
+    gulp.src('./source/sass/**/*.scss')
+        .pipe(bulkSass())
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(plumber())
         .pipe(pleeease({
             autoprefixer: {
@@ -87,15 +73,13 @@ gulp.task('styleguide:generate', function() {
 });
 
 gulp.task('styleguide:applystyles', function() {
-    return sass('source/sass/**/*.scss', {
-            style: 'expanded',
-            compass : true
-        })
+    gulp.src('./source/sass/**/*.scss')
+        .pipe(bulkSass())
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(styleguide.applyStyles())
         .pipe(gulp.dest('./develop/styleguide/'));
 });
 gulp.task('styleguide', ['styleguide:generate', 'styleguide:applystyles']);
-
 
 
 gulp.task('bsreload', function () {
